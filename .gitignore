@@ -1,0 +1,16 @@
+# Binarios compilados
+dwm/dwm
+dmenu/dmenu
+dmenu/dmenu_path
+dmenu/dmenu_run
+dmenu/stest
+slstatus/slstatus
+slstatus-mini/slstatus
+st/st
+
+# Objetos
+*.o
+*.a
+
+# Archivos de configuración generados
+config.h
