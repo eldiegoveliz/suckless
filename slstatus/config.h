@@ -10,11 +10,11 @@ static const char unknown_str[] = "n/a";
 #define MAXLEN 2048
 
 static const char quote_cmd[] =
-	"curl -fsSL --max-time 3 'https://diegoveliz.xyz/api/bulk_data?ticker_list=SPY' 2>/dev/null | "
-	"node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{try{const q=JSON.parse(s).SPY||{};"
+	"curl -fsSL --max-time 3 'https://diegoveliz.xyz/api/bulk_data?ticker_list=ABVX' 2>/dev/null | "
+	"node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d);process.stdin.on(\"end\",()=>{try{const q=JSON.parse(s).ABVX||{};"
 	"const p=Number.isFinite(q.price)?q.price.toFixed(2):\"-\";"
 	"const c=Number.isFinite(q.pct_change)?(q.pct_change>0?\"+\":\"\")+q.pct_change.toFixed(2)+\"%\":\"\";"
-	"console.log(\"SPY \"+p+(c?\" \"+c:\"\"));}catch{console.log(\"SPY n/a\")}})'";
+	"console.log(\"ABVX \"+p+(c?\" \"+c:\"\"));}catch{console.log(\"ABVX n/a\")}})'";
 
 /*
  * function            description                     argument (example)
@@ -73,12 +73,14 @@ static const char quote_cmd[] =
  */
 static const struct arg args[] = {
 	/* function format          argument */
-	{ run_command,   "  %s ",       quote_cmd },
-	{ run_command,   "  %s",        "mpc current --format '%title% ' 2>/dev/null | head -c 16" },
-	{ run_command,   "[%s] ",       "mpc status | grep -o 'playing\\|paused' 2>/dev/null" },
+	{ run_command,   "%s| ",       quote_cmd },
+	{ cpu_perc,      "%s%%| ",   NULL },
+	{ disk_perc,     "%s%%| ",   "/" },
+	{ run_command,   "%s",        "mpc current --format '%title% ' 2>/dev/null | head -c 16" },
+	{ run_command,   "[%s]",       "mpc status | grep -o 'playing\\|paused' 2>/dev/null" },
 	{ run_command,   "  %s%% ",    "pamixer --get-volume" },
 	{ wifi_essid,    " %s ",       "wlan0" },
-	{ battery_perc,  "󰁹1/0:%s%%",   "BAT1" },
+	{ battery_perc,  "󰁹%s%%",   "BAT1" },
 	{ battery_perc,  "/%s%%|",      "BAT0" },
 	{ datetime,      "%s ",         "%F|%T" },
 };
