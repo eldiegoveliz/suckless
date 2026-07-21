@@ -20,7 +20,8 @@ static const char music_state_cmd[] =
 	"mpc status 2>/dev/null | awk '/\\[playing\\]/{printf \"󰐊\"} /\\[paused\\]/{printf \"󰏤\"}'";
 
 static const char wifi_state_cmd[] =
-	"iwgetid -r wlan0 2>/dev/null | awk 'NR == 1 { printf \"󰤨 %s\", substr($0, 1, 2); connected=1 } "
+	"iw dev wlan0 link 2>/dev/null | awk '/^[[:space:]]*SSID: / { "
+	"sub(/^[[:space:]]*SSID: /, \"\"); printf \"󰤨 %s\", substr($0, 1, 2); connected=1; exit } "
 	"END { if (!connected) printf \"󰤭\" }'";
 
 /*
@@ -81,8 +82,9 @@ static const char wifi_state_cmd[] =
 static const struct arg args[] = {
 	/* function format          argument */
 	{ run_command,   	"%s",		quote_cmd },
-	{ cpu_perc,      	"|%s%% ",	NULL },
-	{ disk_perc,     	"%s%%| ",	"/" },
+	{ cpu_perc,      	"|󰻠%s%% ",	NULL },
+	{ ram_perc,      	"󰍛%s%% ",	NULL },
+	{ disk_perc,     	"󰋊%s%%| ",	"/" },
 	/*{ run_command,   	"%s",		"mpc current --format '%title% ' 2>/dev/null | head -c 16" },*/
 	{ run_command,   	"%s",		"/home/diego/code/scripts/suckless/slstatus-music-title" },
 	{ run_command,   	" %s",		music_state_cmd },
