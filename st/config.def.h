@@ -5,7 +5,18 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=14:antialias=true:autohint=true";
+static char *font = "Liberation Mono:pixelsize=13:antialias=true:autohint=true";
+static char *font2[] = {
+	"Noto Color Emoji:pixelsize=13:antialias=true:autohint=true",
+	"CaskaydiaCove Nerd Font Mono:pixelsize=13:antialias=true:autohint=true",
+	"Iosevka Nerd Font:pixelsize=13:antialias=true:autohint=true",
+	"FiraCode Nerd Font:pixelsize=13:antialias=true:autohint=true",
+	"Symbols Nerd Font Mono:pixelsize=13:antialias=true:autohint=true",
+	"Noto Sans Symbols 2:pixelsize=13:antialias=true:autohint=true",
+	"Noto Sans Symbols:pixelsize=13:antialias=true:autohint=true",
+	"DejaVu Sans Mono:pixelsize=13:antialias=true:autohint=true",
+	"DejaVu Sans:pixelsize=13:antialias=true:autohint=true",
+};
 static int borderpx = 15;
 
 /*
@@ -180,10 +191,8 @@ static uint forcemousemod = ShiftMask;
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
 	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
-	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
-	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
-	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
-	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
+	{ XK_ANY_MOD,           Button4, kscrollup,      {.i = 3} },
+	{ XK_ANY_MOD,           Button5, kscrolldown,    {.i = 3} },
 };
 
 /* Internal keyboard shortcuts. */
@@ -204,8 +213,10 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
+	{ TERMMOD,              XK_Up,          kscrollup,      {.i =  1} },
+	{ TERMMOD,              XK_Down,        kscrolldown,    {.i =  1} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
-    { ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
 };
 
 /*

@@ -1278,7 +1278,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 	FcPattern *fcpattern, *fontpattern;
 	FcFontSet *fcsets[] = { NULL };
 	FcCharSet *fccharset;
-	int i, f, numspecs = 0;
+	int i, f, j, numspecs = 0;
 
 	for (i = 0, xp = winx, yp = winy + font->ascent; i < len; ++i) {
 		/* Fetch rune and mode for current glyph. */
@@ -1335,6 +1335,51 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 
 		/* Nothing was found. Use fontconfig to find matching font. */
 		if (f >= frclen) {
+			for (j = 0; j < LEN(font2); j++) {
+				if (frclen >= frccap) {
+					frccap += 16;
+					frc = xrealloc(frc, frccap * sizeof(Fontcache));
+				}
+
+				fontpattern = FcNameParse((FcChar8 *)font2[j]);
+				if (!fontpattern)
+					continue;
+
+				FcPatternDel(fontpattern, FC_PIXEL_SIZE);
+				FcPatternDel(fontpattern, FC_SIZE);
+				FcPatternAddDouble(fontpattern, FC_PIXEL_SIZE, usedfontsize);
+
+				if (frcflags == FRC_ITALIC || frcflags == FRC_ITALICBOLD)
+					FcPatternAddInteger(fontpattern, FC_SLANT, FC_SLANT_ITALIC);
+				if (frcflags == FRC_BOLD || frcflags == FRC_ITALICBOLD)
+					FcPatternAddInteger(fontpattern, FC_WEIGHT, FC_WEIGHT_BOLD);
+
+				FcConfigSubstitute(0, fontpattern, FcMatchPattern);
+				FcDefaultSubstitute(fontpattern);
+
+				frc[frclen].font = XftFontOpenPattern(xw.dpy, fontpattern);
+				if (!frc[frclen].font) {
+					FcPatternDestroy(fontpattern);
+					continue;
+				}
+
+				glyphidx = XftCharIndex(xw.dpy, frc[frclen].font, rune);
+				if (!glyphidx) {
+					XftFontClose(xw.dpy, frc[frclen].font);
+					continue;
+				}
+
+				frc[frclen].flags = frcflags;
+				frc[frclen].unicodep = rune;
+
+				f = frclen;
+				frclen++;
+				break;
+			}
+
+			if (f < frclen)
+				goto fontmatch;
+
 			if (!font->set)
 				font->set = FcFontSort(0, font->pattern,
 				                       1, 0, &fcres);
@@ -1385,6 +1430,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 			FcCharSetDestroy(fccharset);
 		}
 
+fontmatch:
 		specs[numspecs].font = frc[f].font;
 		specs[numspecs].glyph = glyphidx;
 		specs[numspecs].x = (short)xp;
