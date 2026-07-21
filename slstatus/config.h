@@ -16,6 +16,13 @@ static const char quote_cmd[] =
 	"const c=Number.isFinite(q.pct_change)?(q.pct_change>0?\"+\":\"\")+q.pct_change.toFixed(2)+\"%\":\"\";"
 	"console.log(\"ABVX \"+p+(c?\" \"+c:\"\"));}catch{console.log(\"ABVX n/a\")}})'";
 
+static const char music_state_cmd[] =
+	"mpc status 2>/dev/null | awk '/\\[playing\\]/{printf \"󰐊\"} /\\[paused\\]/{printf \"󰏤\"}'";
+
+static const char wifi_state_cmd[] =
+	"iwgetid -r wlan0 2>/dev/null | awk 'NR == 1 { printf \"󰤨 %s\", substr($0, 1, 2); connected=1 } "
+	"END { if (!connected) printf \"󰤭\" }'";
+
 /*
  * function            description                     argument (example)
  *
@@ -73,14 +80,15 @@ static const char quote_cmd[] =
  */
 static const struct arg args[] = {
 	/* function format          argument */
-	{ run_command,   "%s| ",       quote_cmd },
-	{ cpu_perc,      "%s%%| ",   NULL },
-	{ disk_perc,     "%s%%| ",   "/" },
-	{ run_command,   "%s",        "mpc current --format '%title% ' 2>/dev/null | head -c 16" },
-	{ run_command,   "[%s]",       "mpc status | grep -o 'playing\\|paused' 2>/dev/null" },
-	{ run_command,   "  %s%% ",    "pamixer --get-volume" },
-	{ wifi_essid,    " %s ",       "wlan0" },
-	{ battery_perc,  "󰁹%s%%",   "BAT1" },
-	{ battery_perc,  "/%s%%|",      "BAT0" },
-	{ datetime,      "%s ",         "%F|%T" },
+	{ run_command,   	"%s",		quote_cmd },
+	{ cpu_perc,      	"|%s%% ",	NULL },
+	{ disk_perc,     	"%s%%| ",	"/" },
+	/*{ run_command,   	"%s",		"mpc current --format '%title% ' 2>/dev/null | head -c 16" },*/
+	{ run_command,   	"%s",		"/home/diego/code/scripts/suckless/slstatus-music-title" },
+	{ run_command,   	" %s",		music_state_cmd },
+	{ run_command,   	" %s%% ",	"pamixer --get-volume" },
+	{ run_command,   	"%s ",		wifi_state_cmd },
+	{ battery_perc,		"󰁹%s%%",	"BAT1" },
+	{ battery_perc,		"/%s%%|",	"BAT0" },
+	{ datetime,		"%s ",		"%a %d %H:%M" },
 };
