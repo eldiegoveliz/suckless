@@ -75,6 +75,7 @@ static const char *mutevol[] = { "/bin/wpctl", "set-mute",   "@DEFAULT_AUDIO_SIN
 static const char *upvol[] = { "/usr/bin/touch", "/tmp/funciona", NULL };
 static const char *slfull[] = { "/bin/sh", "-c", "pkill slstatus-mini; pkill slstatus; slstatus &", NULL };
 static const char *slmini[] = { "/bin/sh", "-c", "pkill slstatus; pkill slstatus-mini; slstatus-mini &", NULL };
+static const char *monitortoggle[] = { "/bin/sh", "-c", "if xrandr --query | grep 'eDP-1' | grep -q '[0-9]x[0-9]'; then for _ in 1 2 3; do xrandr --output eDP-1 --off; done; else for _ in 1 2 3; do xrandr --output eDP-1 --auto; done; sleep 0.1; sh ~/.fehbg; fi", NULL };
 
 
 static const Key keys[] = {
@@ -119,6 +120,7 @@ static const Key keys[] = {
 	{ MODKEY,  XK_a,  spawn,  {.v = upvol } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = slfull } },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = slmini } },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = monitortoggle } },
 };
 
 /* button definitions */
