@@ -3,13 +3,13 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 1;        /* gap pixel between windows */
-static const unsigned int snap      = 16;       /* snap pixel */
+static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = { "monospace:size=12" };
+static const char dmenufont[]       = "monospace:size=12";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -63,16 +63,28 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *ncmpcppcmd[] = { "st", "-e", "ncmpcpp", NULL };
+static const char *firefoxcmd[] = { "firefox", NULL };
+static const char *lfcmd[] = { "st", "-e", "lf", NULL };
+static const char *bluetcmd[] = { "blueman-manager", NULL };
+static const char *calcmd[] = { "st", "-e", "calcurse", NULL };
+static const char *localccmd[] = { "localc", NULL };
+static const char *scrotcmd[] = { "sh", "-c", "scrot '%Y-%m-%d-%T.png' -e 'mv $f ~/pictures/screenshots/ && xclip -selection clipboard -t image/png < ~/pictures/screenshots/$f'", NULL };
+static const char *scrotsel[] = { "sh", "-c", "scrot -s '%Y-%m-%d-%T.png' -e 'mv $f ~/pictures/screenshots/ && xclip -selection clipboard -t image/png < ~/pictures/screenshots/$f'", NULL };
+static const char *brupcmd[] = { "brightnessctl", "set", "10%+", NULL };
+static const char *brdowncmd[] = { "brightnessctl", "set", "10%-", NULL };
+static const char *mpcToggle[] = { "/bin/mpc", "toggle", NULL };
+static const char *mpcNext[] = { "/bin/mpc", "next", NULL };
+static const char *mpcPrev[] = { "/bin/mpc", "prev", NULL };
 /*static const char *upvol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%", NULL };*/
 /*static const char *downvol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL };*/
 /*static const char *mutevol[] = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };*/
 /*static const char *upvol[]   = { "/usr/bin/pamixer", "-i", "5", NULL };
 static const char *downvol[] = { "/usr/bin/pamixer", "-d", "5", NULL };
 static const char *mutevol[] = { "/usr/bin/pamixer", "-t", NULL };*/
-/*static const char *upvol[]   = { "/bin/wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%+", NULL };*/
+static const char *upvol[] = { "/bin/wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%+", NULL };
 static const char *downvol[] = { "/bin/wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%-", NULL };
 static const char *mutevol[] = { "/bin/wpctl", "set-mute",   "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
-static const char *upvol[] = { "/usr/bin/touch", "/tmp/funciona", NULL };
 static const char *slfull[] = { "/bin/sh", "-c", "pkill slstatus-mini; pkill slstatus; slstatus &", NULL };
 static const char *slmini[] = { "/bin/sh", "-c", "pkill slstatus; pkill slstatus-mini; slstatus-mini &", NULL };
 static const char *monitortoggle[] = { "/bin/sh", "-c", "if xrandr --query | grep 'eDP-1' | grep -q '[0-9]x[0-9]'; then for _ in 1 2 3; do xrandr --output eDP-1 --off; done; else for _ in 1 2 3; do xrandr --output eDP-1 --auto; done; sleep 0.1; sh ~/.fehbg; fi", NULL };
@@ -121,6 +133,21 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_s,      spawn,          {.v = slfull } },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = slmini } },
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = monitortoggle } },
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = ncmpcppcmd } },
+	{ MODKEY|ShiftMask,             XK_f,      spawn,          {.v = firefoxcmd } },
+	{ MODKEY,                       XK_e,      spawn,          {.v = lfcmd } },
+	{ MODKEY|ShiftMask,             XK_b,      spawn,          {.v = bluetcmd } },
+	{ MODKEY,                       XK_Print,  spawn,          {.v = scrotcmd } },
+	{ MODKEY|ShiftMask,             XK_Print,  spawn,          {.v = scrotsel } },
+	{ MODKEY,                       XK_c,      spawn,          {.v = calcmd } },
+	{ MODKEY|ShiftMask,             XK_l,      spawn,          {.v = localccmd } },
+	{ MODKEY|ControlMask|ShiftMask, XK_Prior,  zoom,           {.f = +1} },
+	{ MODKEY|ControlMask|ShiftMask, XK_Next,   zoom,           {.f = -1} },
+	{ 0,                            XF86XK_MonBrightnessUp,   spawn, {.v = brupcmd } },
+	{ 0,                            XF86XK_MonBrightnessDown, spawn, {.v = brdowncmd } },
+	{ 0,                            XF86XK_AudioPlay,         spawn, {.v = mpcToggle } },
+	{ 0,                            XF86XK_AudioNext,         spawn, {.v = mpcNext } },
+	{ 0,                            XF86XK_AudioPrev,         spawn, {.v = mpcPrev } },
 };
 
 /* button definitions */
