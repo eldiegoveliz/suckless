@@ -3,9 +3,9 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int gappx     = 1;        /* gap pixel between windows */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int snap      = 16;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=10" };
@@ -39,7 +39,7 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
-static const int refreshrate = 120;  /* refresh rate (per second) for client move/resize */
+static const int refreshrate = 60;  /* refresh rate (per second) for client move/resize */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -49,7 +49,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -73,6 +73,8 @@ static const char *mutevol[] = { "/usr/bin/pamixer", "-t", NULL };*/
 static const char *downvol[] = { "/bin/wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%-", NULL };
 static const char *mutevol[] = { "/bin/wpctl", "set-mute",   "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
 static const char *upvol[] = { "/usr/bin/touch", "/tmp/funciona", NULL };
+static const char *slfull[] = { "/bin/sh", "-c", "pkill slstatus-mini; pkill slstatus; slstatus &", NULL };
+static const char *slmini[] = { "/bin/sh", "-c", "pkill slstatus; pkill slstatus-mini; slstatus-mini &", NULL };
 
 
 static const Key keys[] = {
@@ -115,6 +117,8 @@ static const Key keys[] = {
     	{ 0, XF86XK_AudioMute,        spawn, {.v = mutevol } },
 	{ MODKEY, XF86XK_AudioRaiseVolume, spawn, {.v = upvol } },
 	{ MODKEY,  XK_a,  spawn,  {.v = upvol } },
+	{ MODKEY,                       XK_s,      spawn,          {.v = slfull } },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = slmini } },
 };
 
 /* button definitions */
