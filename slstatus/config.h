@@ -82,13 +82,13 @@ static const char wifi_state_cmd[] =
 static const struct arg args[] = {
 	/* function format          argument */
 	{ run_command,   	"%s",		quote_cmd },
-	{ cpu_perc,      	"|󰻠%s%% ",	NULL },
-	{ ram_perc,      	"󰍛%s%% ",	NULL },
-	{ disk_perc,     	"󰋊%s%%| ",	"/" },
+	{ cpu_perc,      	"|󰻠 %s%% ",	NULL },
+	{ ram_perc,      	"󰍛 %s%% ",	NULL },
+	{ disk_perc,     	"󰋊 %s%%| ",	"/" },
 	/*{ run_command,   	"%s",		"mpc current --format '%title% ' 2>/dev/null | head -c 16" },*/
 	{ run_command,   	"%s",		"/home/diego/code/scripts/suckless/slstatus-music-title" },
 	{ run_command,   	" %s",		music_state_cmd },
-	{ run_command,   	" %s%% ",	"pamixer --get-volume" },
+	{ run_command,   	"  %s%% ",	"pamixer --get-volume" },
 	{ run_command,   	"%s ",		wifi_state_cmd },
 	{ battery_perc,		"󰁹%s%%",	"BAT1" },
 	{ battery_perc,		"/%s%%|",	"BAT0" },
