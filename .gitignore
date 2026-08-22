@@ -14,3 +14,6 @@ st/st
 
 # Archivos de configuración generados
 config.h
+
+# Repositorio independiente
+/dwl/
