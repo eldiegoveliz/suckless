@@ -4,12 +4,12 @@
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int gappx     = 2;        /* gap pixel between windows */
+static const unsigned int gappx     = 10;        /* gap pixel between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=12" };
-static const char dmenufont[]       = "monospace:size=12";
+static const char *fonts[]          = { "GeistMono Nerd Font:size=12" };
+static const char dmenufont[]       = "GeistMono Nerd Font:size=12";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -64,7 +64,8 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *ncmpcppcmd[] = { "st", "-e", "ncmpcpp", NULL };
-static const char *firefoxcmd[] = { "firefox", NULL };
+static const char *firefoxnightlycmd[] = { "firefox-nightly", NULL };
+static const char *t3codecmd[] = { "t3code", NULL };
 static const char *lfcmd[] = { "st", "-e", "lf", NULL };
 static const char *bluetcmd[] = { "blueman-manager", NULL };
 static const char *calcmd[] = { "st", "-e", "calcurse", NULL };
@@ -129,12 +130,12 @@ static const Key keys[] = {
     	{ 0, XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
     	{ 0, XF86XK_AudioMute,        spawn, {.v = mutevol } },
 	{ MODKEY, XF86XK_AudioRaiseVolume, spawn, {.v = upvol } },
-	{ MODKEY,  XK_a,  spawn,  {.v = upvol } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = slfull } },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = slmini } },
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = monitortoggle } },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = ncmpcppcmd } },
-	{ MODKEY|ShiftMask,             XK_f,      spawn,          {.v = firefoxcmd } },
+	{ MODKEY|ShiftMask, 		XK_t,	   spawn, 	   {.v = t3codecmd } },
+	{ MODKEY|ShiftMask,             XK_f,      spawn,          {.v = firefoxnightlycmd } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = lfcmd } },
 	{ MODKEY|ShiftMask,             XK_b,      spawn,          {.v = bluetcmd } },
 	{ MODKEY,                       XK_Print,  spawn,          {.v = scrotcmd } },
