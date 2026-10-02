@@ -412,7 +412,7 @@ void
 attachbelow(Client *c)
 {
 	/* new clients appear as slaves on the right, master stays put */
-	if (c->mon->sel == NULL || c->mon->sel == c->mon->clients || c->mon->sel->isfloating) {
+	if (c->mon->sel == NULL || c->mon->sel->isfloating) {
 		attach(c);
 		return;
 	}
